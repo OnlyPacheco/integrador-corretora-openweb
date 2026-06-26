@@ -182,10 +182,15 @@ module.exports = async function handler(req, res) {
         xml += tag('idSubTipo', idSubTipo, '                ');
         xml += '            </tipoPropriedade>\n';
 
+        // --- Metragem (campos dedicados, fora de características) ---
+        // superficieTotal = área do terreno/total | superficieUtil = área útil/construída
+        xml += tag('superficieTotal', area, '            ');
+        xml += tag('superficieUtil',  area, '            ');
+
         // --- Características ---
         xml += '            <caracteristicas>\n';
 
-        // Área (CFT3 = área construída em m²)
+        // Área também enviada como característica CFT3 (m² construído) para portais que exigem
         if (area) {
             xml += '                <caracteristica>\n';
             xml += tag('id',    'CFT3', '                    ');
@@ -261,13 +266,16 @@ module.exports = async function handler(req, res) {
         xml += '            </multimidia>\n';
 
         // --- Localização ---
+        // Localidade por extenso: "Bairro, Cidade, Estado, Brasil"
+        const localidadeTexto = [bairro, cidade, 'Rio de Janeiro', 'Brasil'].filter(Boolean).join(', ');
+
         xml += '            <localizacao>\n';
-        xml += tag('idLocalidade',  cidade,           '                ');
-        xml += tag('endereco',      enderecoCompleto, '                ');
-        xml += tag('latitude',      latitude,         '                ');
-        xml += tag('longitude',     longitude,        '                ');
-        xml += tag('mostrarMapa',   latitude && longitude ? 'EXACTO' : 'APROXIMADO', '                ');
-        xml += tag('codigoPostal',  cep,              '                ');
+        xml += tag('localidade',   localidadeTexto,  '                ');
+        xml += tag('endereco',     enderecoCompleto, '                ');
+        xml += tag('latitude',     latitude,         '                ');
+        xml += tag('longitude',    longitude,        '                ');
+        xml += tag('mostrarMapa',  latitude && longitude ? 'EXACTO' : 'APROXIMADO', '                ');
+        xml += tag('codigoPostal', cep,              '                ');
         xml += '            </localizacao>\n';
 
         // --- Publicação ---
