@@ -1,0 +1,13 @@
+{
+  "name": "integrador-corretora",
+  "version": "1.0.0",
+  "description": "Feed XML para integração com ImoveisWeb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "echo 'Build completed'"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
