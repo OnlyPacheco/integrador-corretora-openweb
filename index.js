@@ -182,19 +182,27 @@ module.exports = async function handler(req, res) {
         xml += tag('idSubTipo', idSubTipo, '                ');
         xml += '            </tipoPropriedade>\n';
 
-        // --- Metragem (campos dedicados, fora de características) ---
-        // superficieTotal = área do terreno/total | superficieUtil = área útil/construída
-        xml += tag('superficieTotal', area, '            ');
-        xml += tag('superficieUtil',  area, '            ');
-
         // --- Características ---
         xml += '            <caracteristicas>\n';
 
-        // Área também enviada como característica CFT3 (m² construído) para portais que exigem
+        // Metragem: CFT101 = AREA_UTIL | CFT100 = AREA_TOTAL | CON1 = unidade M2
         if (area) {
             xml += '                <caracteristica>\n';
-            xml += tag('id',    'CFT3', '                    ');
-            xml += tag('valor', area,   '                    ');
+            xml += tag('id',    'CFT101', '                    ');
+            xml += tag('nome',  'MEDIDAS|AREA_UTIL', '                    ');
+            xml += tag('valor', area, '                    ');
+            xml += '                </caracteristica>\n';
+
+            xml += '                <caracteristica>\n';
+            xml += tag('id',    'CFT100', '                    ');
+            xml += tag('nome',  'MEDIDAS|AREA_TOTAL', '                    ');
+            xml += tag('valor', area, '                    ');
+            xml += '                </caracteristica>\n';
+
+            xml += '                <caracteristica>\n';
+            xml += tag('id',      'CON1', '                    ');
+            xml += tag('nome',    'MEDIDAS|UNIDAD_DE_MEDIDA', '                    ');
+            xml += tag('idValor', 'M2', '                    ');
             xml += '                </caracteristica>\n';
         }
 
