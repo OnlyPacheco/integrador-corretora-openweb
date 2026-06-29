@@ -33,11 +33,12 @@ function getTipoIds(tipoStr) {
 // Mapeamento de características OpenNavent
 // id CFT3 = área construída (m²)  |  outros = comodidades booleanas
 // ---------------------------------------------------------------
+// Campos PRINCIPALES: quantidade vai em <valor>, sem <idValor>
 const CARAC_MAP = {
-    quartos:    '20012',   // dormitórios
-    banheiros:  '20056',   // banheiros
-    garagem:    '10031',   // garagem/vagas
-    suites:     '20135',   // suítes
+    quartos:   { id: 'CFT2', nome: 'PRINCIPALES|QUARTO'  },
+    banheiros: { id: 'CFT3', nome: 'PRINCIPALES|BANHEIRO' },
+    suites:    { id: 'CFT4', nome: 'PRINCIPALES|SUITE'   },
+    garagem:   { id: 'CFT7', nome: 'PRINCIPALES|VAGA'    },
 };
 
 // ---------------------------------------------------------------
@@ -206,19 +207,20 @@ module.exports = async function handler(req, res) {
             xml += '                </caracteristica>\n';
         }
 
-        // Quartos, banheiros, garagem, suítes (campos com idValor)
+        // Campos PRINCIPALES: apenas <valor> com a quantidade (sem <idValor>)
         const caracItems = [
-            { campo: quartos,   id: CARAC_MAP.quartos   },
-            { campo: banheiros, id: CARAC_MAP.banheiros  },
-            { campo: garagem,   id: CARAC_MAP.garagem    },
-            { campo: suites,    id: CARAC_MAP.suites     },
+            { campo: quartos,   carac: CARAC_MAP.quartos   },
+            { campo: banheiros, carac: CARAC_MAP.banheiros  },
+            { campo: suites,    carac: CARAC_MAP.suites     },
+            { campo: garagem,   carac: CARAC_MAP.garagem    },
         ];
 
-        for (const { campo, id: caracId } of caracItems) {
+        for (const { campo, carac } of caracItems) {
             if (campo) {
                 xml += '                <caracteristica>\n';
-                xml += tag('id',      caracId, '                    ');
-                xml += tag('idValor', campo,   '                    ');
+                xml += tag('id',    carac.id,   '                    ');
+                xml += tag('nome',  carac.nome, '                    ');
+                xml += tag('valor', campo,      '                    ');
                 xml += '                </caracteristica>\n';
             }
         }
