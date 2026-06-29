@@ -296,6 +296,15 @@ module.exports = async function handler(req, res) {
         // --- Link externo (campo extra útil para portais que aceitam) ---
         xml += tag('linkExterno', linkImovel, '            ');
 
+        // --- Publicador ---
+        xml += '            <publicador>\n';
+        xml += tag('codigoImobiliaria', '', '                '); // substituir pelo código fornecido pelo portal
+        xml += tag('emailUsuario',      'corretora.goncalves25@gmail.com', '                ');
+        xml += tag('emailContato',      'corretora.goncalves25@gmail.com', '                ');
+        xml += tag('nomeContato',       'Corretora Gonçalves',             '                ');
+        xml += tag('telefoneContato',   '21 97125-2642',                   '                ');
+        xml += '            </publicador>\n';
+
         xml += '        </Imovel>\n';
     }
 
